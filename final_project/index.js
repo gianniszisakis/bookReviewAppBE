@@ -17,7 +17,7 @@ app.use(
   })
 );
 
-app.use("/customer/auth/*", function auth(req, res, next) {
+app.use("/customer/auth", function auth(req, res, next) {
   if (req.session.authorization) {
     let token = req.session.authorization["accessToken"];
 
