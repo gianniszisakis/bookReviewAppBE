@@ -36,8 +36,27 @@ const authenticatedUser = (username, password) => {
 
 //only registered users can login
 regd_users.post("/login", (req, res) => {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (!username || !password) {
+    return res.status(403).json({ message: "Username or password missing" });
+  }
+
+  if (authenticatedUser(username, password)) {
+    let accessToken = jwt.sign(
+      {
+        data: password,
+      },
+      "access",
+      { expiresIn: 60 * 60 },
+    );
+
+    req.session.authorization = { accessToken, username };
+    return res.status(200).send("User logged in");
+  } else {
+    return res.status(208).send("Wrong username or password");
+  }
 });
 
 // Add a book review
